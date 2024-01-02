@@ -22,7 +22,7 @@ jobs:
         go-version: '1.20'
 
     - name: Build
-      run: go build -v ./...
+      run: go build -v ./dist -o AppBundler
 
     - name: Test
       run: go test -v ./...
@@ -30,6 +30,6 @@ jobs:
     - name: Upload content
       uses: actions/upload-artifact@v3
       with:
-          name: static-folder
-          path: ./builder
+          name: AppBundler
+          path: ./dist/AppBundler
       
