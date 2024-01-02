@@ -1,24 +1,27 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
-
+name: Build
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
+    paths:
+      - '**'
+      - '!**.md'
+      - '!dev/**'
+      - '!verify/**'
 jobs:
-  run:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        include:
+          - { runner: macos,  os: darwin,  arch: arm64 }
+    runs-on: ${{ matrix.runner }}-latest
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.19
-
-    - name: Run
-      run: go run main.go
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+      # Dogfood this Action to build its own CLI.
+      - uses: ./
+        with:
+          # We override the default product name so that this test build
+          # of the CLI doesn't take the place of the cli built by the action.
+          product_name: app-budler
+          go_version: '1.20'
+          os: ${{ matrix.os }}
+          arch: ${{ matrix.arch }}
+          instructions: go build -o $BIN_PATH -trimpath -buildvcs=false
