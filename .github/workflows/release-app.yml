@@ -39,10 +39,10 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub tarafından otomatik sağlanır
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}   # Tag ismi, push yapılan tag ile
-        release_name: "Release ${{ github.ref }}"
+        tag_name: ${{ github.ref_name }}
+        release_name: "Release ${{ github.ref_name }}"
         draft: false
         prerelease: false
 
