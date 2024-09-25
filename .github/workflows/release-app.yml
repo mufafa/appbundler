@@ -1,0 +1,52 @@
+name: Release-AppBundler
+
+on:
+  push:
+    branches: [ "master" ]
+    tags:         # Tag push'larında çalışmasını sağlamak için ekledik
+      - 'v*'
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Build
+      run: go build -o ./dist/AppBundler
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: Upload content as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: AppBundler
+        path: ./dist/AppBundler
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub tarafından otomatik sağlanır
+      with:
+        tag_name: ${{ github.ref }}   # Tag ismi, push yapılan tag ile
+        release_name: "Release ${{ github.ref }}"
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/AppBundler
+        asset_name: AppBundler
+        asset_content_type: application/octet-stream
