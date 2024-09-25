@@ -1,4 +1,4 @@
-name: Build and Release Go App
+name: Release App
 
 # Sadece tag push'larında çalışır (örn: v1.0.0 gibi)
 on:
