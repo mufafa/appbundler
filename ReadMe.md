@@ -17,8 +17,8 @@ $ ./go build -o AppBundler
 These steps will put the AppBundler executable under /usr/local/bin. 
 ```
 $ cd ~/Documents   #or where you have built executable file#
-$ mv AppleBunler /usr/local/bin
-$ echo 'export PATH=/usr/local/bin:$PATH' >> ~/Desktop/zshrc.txt  #or wherever you want to install#
+$ mv AppleBundler /usr/local/bin
+$ echo 'export PATH=/usr/local/bin:$PATH' >> ~/.zshrc  #or wherever you want to install#
 ```
 ## Using AppBundler
 You can use AppBundler both go project or any other macOS executable binary file.
